@@ -6,11 +6,31 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import CustomUserEditForm
 
+from courses.models import Course
+
+def home_view(request):
+    return render(request, 'pages/Home.html')
+
+def about_view(request):
+    return render(request, 'pages/About.html')
+
+def contact_view(request):
+    return render(request, 'pages/Contact.html')
+
+
+def courses_view(request):
+    return render(request, 'pages/Courses.html')
+
 
 
 @login_required
 def admin_dashboard(request):
     return render(request, 'Dashboards/admin_dashboard.html')
+
+
+@login_required
+def student_dashboard(request):
+    return render(request, 'Dashboards/student_dashboard.html')
 
 
 
