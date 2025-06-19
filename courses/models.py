@@ -6,9 +6,8 @@ class Course(models.Model):
     description = models.TextField()
     faculty = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'user_type': 'FACULTY'})
 
-def __str__(self):
+    def __str__(self):
         return self.name
-
 
 class StudentEnrollment(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'user_type': 'STUDENT'})

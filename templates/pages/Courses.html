@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block title %}Courses - Student Attendance System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Courses We Offer</h2>
+  <div class="row g-4">
+
+    <!-- Python Full Stack -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card text-white bg-primary h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title">Python Full Stack</h5>
+          <p class="card-text">HTML, CSS, JS, Python, Django, REST APIs & MySQL for full web development.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Java Full Stack -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card text-white bg-success h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title">Java Full Stack</h5>
+          <p class="card-text">Core Java, JSP, Spring Boot, Hibernate & Angular/React.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Science with Python -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card text-white bg-info h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title">Data Science with Python</h5>
+          <p class="card-text">Learn ML, Pandas, NumPy, Seaborn, Scikit-learn & real-world projects.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- C and C++ Programming -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card text-white bg-warning h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title">C and C++ Programming</h5>
+          <p class="card-text">Master programming fundamentals and OOP using C/C++.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript and React -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card text-white bg-danger h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title">JavaScript & React</h5>
+          <p class="card-text">React.js, components, hooks, state, props, routers & APIs.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MERN Stack -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card text-white bg-secondary h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title">MERN Stack</h5>
+          <p class="card-text">MongoDB, Express, React & Node.js for dynamic full-stack apps.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Android Development -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card text-white bg-dark h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title">Android Development</h5>
+          <p class="card-text">Build Android apps using Java/Kotlin, Firebase & publish on Play Store.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHP with MySQL -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card text-dark bg-light h-100 shadow">
+        <div class="card-body">
+          <h5 class="card-title">PHP with MySQL</h5>
+          <p class="card-text">Create dynamic websites using PHP scripting and MySQL databases.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- UI/UX Design -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card text-white" style="background-color: #6f42c1;">
+        <div class="card-body">
+          <h5 class="card-title">UI/UX Design</h5>
+          <p class="card-text">Design interactive interfaces with Figma, Adobe XD & best UX practices.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AWS Cloud Computing -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card text-white" style="background-color: #20c997;">
+        <div class="card-body">
+          <h5 class="card-title">AWS Cloud Computing</h5>
+          <p class="card-text">AWS services like EC2, Lambda, S3, IAM and scalable deployments.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .card {
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-title {
+    font-weight: 600;
+  }
+
+  .card-text {
+    font-size: 0.95rem;
+  }
+</style>
+{% endblock %}

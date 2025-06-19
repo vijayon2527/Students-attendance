@@ -1,52 +1,141 @@
 {% extends 'base.html' %}
-
-{% block title %}Register{% endblock %}
-
-{% block extra_css %}
-<style>
-  body {
-    background-color: #e9ecef;
-  }
-
-  .register-box {
-    max-width: 500px;
-    margin: 70px auto;
-    background: #ffffff;
-    padding: 35px;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  }
-
-  .register-box h2 {
-    margin-bottom: 25px;
-    text-align: center;
-    color: #343a40;
-  }
-
-  .form-label {
-    font-weight: 600;
-  }
-
-  .btn-register {
-    width: 100%;
-    font-weight: bold;
-  }
-</style>
-{% endblock %}
+{% load static %}
 
 {% block content %}
-<div class="register-box">
-  <h2>Register</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary btn-register">Register</button>
-  </form>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body">
+          <h2 class="text-center mb-4">Register</h2>
+          <form method="post" enctype="multipart/form-data" id="registerForm" novalidate>
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div class="mb-3">
+              <label for="id_username" class="form-label">Username</label>
+              <input type="text" name="username" id="id_username" placeholder="Enter your username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" value="{{ form.username.value|default_if_none:'' }}">
+              <div class="invalid-feedback">Enter your username</div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="id_email" class="form-label">Email</label>
+              <input type="email" name="email" id="id_email" placeholder="Enter your email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" value="{{ form.email.value|default_if_none:'' }}">
+              <div class="invalid-feedback">Enter a valid email</div>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="mb-3">
+              <label for="id_phone_number" class="form-label">Phone Number</label>
+              <input type="text" name="phone_number" id="id_phone_number" placeholder="Enter your phone number" class="form-control {% if form.phone_number.errors %}is-invalid{% endif %}" value="{{ form.phone_number.value|default_if_none:'' }}">
+              <div class="invalid-feedback">Enter your phone number</div>
+            </div>
+
+            <!-- Gender -->
+            <div class="mb-3">
+              <label for="id_gender" class="form-label">Gender</label>
+              <select name="gender" id="id_gender" class="form-select {% if form.gender.errors %}is-invalid{% endif %}">
+                <option value="">Select your gender</option>
+                <option value="MALE" {% if form.gender.value == "MALE" %}selected{% endif %}>Male</option>
+                <option value="FEMALE" {% if form.gender.value == "FEMALE" %}selected{% endif %}>Female</option>
+                <option value="OTHER" {% if form.gender.value == "OTHER" %}selected{% endif %}>Other</option>
+              </select>
+              <div class="invalid-feedback">Please select your gender</div>
+            </div>
+
+            <!-- Course Dropdown -->
+            <div class="mb-3">
+              <label for="id_course" class="form-label">Course</label>
+              <select name="course" id="id_course" class="form-select {% if form.course.errors %}is-invalid{% endif %}">
+                <option value="">Select a course</option>
+                {% for course in form.course.field.queryset %}
+                  <option value="{{ course.id }}" {% if form.course.value|stringformat:"s" == course.id|stringformat:"s" %}selected{% endif %}>{{ course.name }}</option>
+                {% endfor %}
+              </select>
+              <div class="invalid-feedback">Please select a course</div>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="id_password1" class="form-label">Password</label>
+              <input type="password" name="password1" id="id_password1" placeholder="Enter password" class="form-control {% if form.password1.errors %}is-invalid{% endif %}">
+              <div class="invalid-feedback">Enter a password</div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="mb-3">
+              <label for="id_password2" class="form-label">Confirm Password</label>
+              <input type="password" name="password2" id="id_password2" placeholder="Confirm password" class="form-control {% if form.password2.errors %}is-invalid{% endif %}">
+              <div class="invalid-feedback">Confirm your password</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script>
 <script>
-  console.log("Register page loaded.");
+  $(document).ready(function () {
+    const form = $("#registerForm");
+
+    form.validate({
+      rules: {
+        username: { required: true, minlength: 3 },
+        email: { required: true, email: true },
+        phone_number: {
+          required: true, digits: true, minlength: 10, maxlength: 15
+        },
+        gender: { required: true },
+        course: { required: true },
+        password1: { required: true, minlength: 6 },
+        password2: { required: true, equalTo: "#id_password1" }
+      },
+      messages: {
+        username: { required: "Enter your username", minlength: "At least 3 characters" },
+        email: { required: "Enter your email", email: "Enter a valid email" },
+        phone_number: {
+          required: "Enter your phone number",
+          digits: "Use digits only",
+          minlength: "Minimum 10 digits",
+          maxlength: "Maximum 15 digits"
+        },
+        gender: { required: "Please select your gender" },
+        course: { required: "Please select a course" },
+        password1: { required: "Enter a password", minlength: "At least 6 characters" },
+        password2: { required: "Confirm your password", equalTo: "Passwords must match" }
+      },
+      errorElement: "div",
+      errorClass: "invalid-feedback",
+      highlight: function (element) {
+        $(element).addClass("is-invalid").removeClass("is-valid");
+      },
+      unhighlight: function (element) {
+        $(element).removeClass("is-invalid").addClass("is-valid");
+        $(element).siblings(".invalid-feedback").hide();
+      },
+      errorPlacement: function (error, element) {
+        if (!element.next(".invalid-feedback").length) {
+          error.insertAfter(element);
+        } else {
+          element.next(".invalid-feedback").text(error.text()).show();
+        }
+      }
+    });
+
+    form.find('input, select').on('input change', function () {
+      if ($(this).valid()) {
+        $(this).removeClass("is-invalid").addClass("is-valid");
+        $(this).next(".invalid-feedback").hide();
+      }
+    });
+  });
 </script>
 {% endblock %}

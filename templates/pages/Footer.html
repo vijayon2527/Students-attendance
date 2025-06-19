@@ -1,0 +1,30 @@
+<footer class="bg-dark text-white mt-5">
+  <div class="container py-4">
+    <div class="row">
+      <div class="col-md-4">
+        <h5>About AGP Institute</h5>
+        <p>
+          AGP Coaching Institute is dedicated to providing quality education and skill development
+          for students aspiring for excellence.
+        </p>
+      </div>
+      <div class="col-md-4">
+        <h5>Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'users:home' %}" class="text-white text-decoration-none">Home</a></li>
+          <li><a href="{% url 'users:about' %}" class="text-white text-decoration-none">About</a></li>
+          <li><a href="{% url 'courses:course_list' %}" class="text-white text-decoration-none">Courses</a></li>
+          <li><a href="{% url 'users:contact' %}" class="text-white text-decoration-none">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Contact Us</h5>
+        <p>Email: contact@agpinstitute.com</p>
+        <p>Phone: +91-9876543210</p>
+        <p>Address: Main Road, Hyderabad</p>
+      </div>
+    </div>
+    <hr class="border-light">
+    <p class="text-center mb-0">© {{ year }} AGP Coaching Institute. All rights reserved.</p>
+  </div>
+</footer>

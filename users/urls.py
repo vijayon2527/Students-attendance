@@ -3,10 +3,14 @@ from .views import *
 
 app_name='users'
 urlpatterns = [
-    path('admin/dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('admin_dashboard/', admin_dashboard, name='admin_dashboard'),
     path('student/dashboard/', student_dashboard, name='student_dashboard'),
     path('faculty/dashboard/', faculty_dashboard, name='faculty_dashboard'),
-
+    path('',home_view, name='home'),
+    path('about/',about_view, name='about'),
+    path('courses/',courses_view, name='courses'),
+    path('contact/',contact_view, name='contact'),
+   
     path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),

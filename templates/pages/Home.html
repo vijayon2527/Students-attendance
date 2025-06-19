@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home - AGP Coaching Institute{% endblock %}
+
+{% block content %}
+
+<div class="text-center mt-5">
+  <h1>Welcome to AGP Coaching Institute</h1>
+  <p class="lead">Achieve Academic Excellence with Expert Coaching & Mentorship</p>
+</div>
+
+<!-- LMS Feature Card -->
+<div class="container my-5">
+  <div class="card shadow-lg border-0">
+    <div class="row g-0 align-items-center">
+      <div class="col-md-5">
+        <img src="{% static 'pages/LMS.png' %}" alt="LMS" class="img-fluid rounded-start w-100 h-100" style="object-fit: cover;">
+      </div>
+      <div class="col-md-7">
+        <div class="card-body">
+          <h4 class="card-title">Learn Anytime, Anywhere with Our LMS</h4>
+          <p class="card-text">
+            Our Learning Management System (LMS) brings the classroom to your fingertips. Whether you're preparing for board exams, competitive tests, or mastering concepts, our LMS enables personalized learning at your convenience.
+          </p>
+          <p class="card-text">
+            Access recorded lectures, practice materials, mock tests, and track your progress — all in one powerful platform accessible from desktop or mobile.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Services Section -->
+<div class="container my-5">
+  <div class="card shadow-lg border-0">
+    <div class="card-body">
+
+      <div class="text-center mb-5">
+        <h2 class="fw-bold">Our Core Services</h2>
+        <p class="text-muted">Tailored Learning for Every Student</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-3 col-sm-6">
+          <div class="card h-100 border-0 shadow-sm" style="background-color: #E0F7FA;">
+            <div class="card-body text-center">
+              <i class="fas fa-chalkboard-teacher service-icon"></i>
+              <h5 class="card-title mt-3">Expert Faculty</h5>
+              <p class="card-text small text-muted">Our certified and experienced teachers provide concept clarity and exam-oriented coaching for all major subjects.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-sm-6">
+          <div class="card h-100 border-0 shadow-sm" style="background-color: #FFF3E0;">
+            <div class="card-body text-center">
+              <i class="fas fa-laptop service-icon"></i>
+              <h5 class="card-title mt-3">Live + Recorded Classes</h5>
+              <p class="card-text small text-muted">Flexible learning with live interactive sessions and 24/7 access to recorded lectures through our LMS.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-sm-6">
+          <div class="card h-100 border-0 shadow-sm" style="background-color: #E8F5E9;">
+            <div class="card-body text-center">
+              <i class="fas fa-edit service-icon"></i>
+              <h5 class="card-title mt-3">Mock Tests & Doubt Clearing</h5>
+              <p class="card-text small text-muted">Frequent tests, performance analysis, and doubt sessions help reinforce learning and improve confidence.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-sm-6">
+          <div class="card h-100 border-0 shadow-sm" style="background-color: #F3E5F5;">
+            <div class="card-body text-center">
+              <i class="fas fa-book-reader service-icon"></i>
+              <h5 class="card-title mt-3">Library & Study Material</h5>
+              <p class="card-text small text-muted">Access a rich collection of textbooks, guides, and PDFs curated by top faculty for your exam success.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Testimonials Section -->
+<div class="container my-5">
+  <div class="text-center mb-4">
+    <h2 class="fw-bold">What Our Students Say</h2>
+    <p class="text-muted">Real stories. Real impact.</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm p-3 text-white" style="background-color: #1976d2;">
+        <p>"The faculty at AGP is highly knowledgeable and very supportive. Their LMS helped me revise anytime I wanted!"</p>
+        <h6 class="mb-0 fw-semibold">— Dilip Sapkota</h6>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm p-3 text-white" style="background-color: #388e3c;">
+        <p>"The online classes and mock tests gave me confidence before my NEET exam. Highly recommended coaching center!"</p>
+        <h6 class="mb-0 fw-semibold">— Maharshi</h6>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm p-3 text-white" style="background-color: #f57c00;">
+        <p>"Interactive classes and doubt sessions helped me strengthen my weak subjects. I saw a clear improvement in my marks."</p>
+        <h6 class="mb-0 fw-semibold">— Snethit</h6>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .service-icon {
+    font-size: 2.5rem;
+    color: #0d6efd;
+  }
+  .card-title {
+    font-weight: 600;
+  }
+  .card-text {
+    font-size: 0.95rem;
+  }
+  .card {
+  border-radius: 16px;
+  transition: transform 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+</style>
+{% endblock %}
