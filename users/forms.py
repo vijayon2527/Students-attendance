@@ -3,13 +3,9 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import User, StudentProfile, FacultyProfile
 from django.contrib.auth.forms import UserChangeForm
 from courses.models import Course
+from django.contrib.auth.forms import AuthenticationForm
 
 
-
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from .models import User, StudentProfile
-from courses.models import Course
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -66,6 +62,13 @@ class CustomUserCreationForm(UserCreationForm):
             )
         return user
 
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Enter your username'})
+        self.fields['password'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Enter your password'})
 
 class StudentProfileForm(forms.ModelForm):
     class Meta:

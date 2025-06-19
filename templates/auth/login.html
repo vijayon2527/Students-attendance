@@ -82,27 +82,27 @@
       </div>
     {% endif %}
 
-    <form method="post" novalidate>
-      {% csrf_token %}
+<form method="post" novalidate>
+  {% csrf_token %}
 
-      <div class="mb-3">
-        <label for="id_username" class="form-label">Username</label>
-        <input type="text" name="username" class="form-control" id="id_username" required>
-        {% if form.username.errors %}
-          <div class="form-error">{{ form.username.errors.0 }}</div>
-        {% endif %}
-      </div>
+  <div class="mb-3">
+    <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+    {{ form.username }}
+    {% if form.username.errors %}
+      <div class="form-error">{{ form.username.errors.0 }}</div>
+    {% endif %}
+  </div>
 
-      <div class="mb-3">
-        <label for="id_password" class="form-label">Password</label>
-        <input type="password" name="password" class="form-control" id="id_password" required>
-        {% if form.password.errors %}
-          <div class="form-error">{{ form.password.errors.0 }}</div>
-        {% endif %}
-      </div>
+  <div class="mb-3">
+    <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+    {{ form.password }}
+    {% if form.password.errors %}
+      <div class="form-error">{{ form.password.errors.0 }}</div>
+    {% endif %}
+  </div>
 
-      <button type="submit" class="btn btn-login">Login</button>
-    </form>
+  <button type="submit" class="btn btn-login">Login</button>
+</form>
 
     <p class="text-center mt-4 small text-muted">Forgot your password? <a href="#">Click here</a></p>
   </div>

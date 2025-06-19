@@ -7,6 +7,7 @@ from .models import *
 from .forms import CustomUserEditForm
 from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm
+from .forms import *
 
 def register_view(request):
     if request.method == 'POST':
@@ -18,7 +19,7 @@ def register_view(request):
         form = CustomUserCreationForm()
     return render(request, 'auth/register.html', {'form': form})
 
-from courses.models import Course
+
 
 def home_view(request):
     return render(request, 'pages/Home.html')
@@ -41,32 +42,37 @@ def admin_dashboard(request):
 
 
 @login_required
+def faculty_dashboard(request):
+    return render(request, 'Dashboards/faculty_dashboard.html')
+
+
+@login_required
 def student_dashboard(request):
     return render(request, 'Dashboards/student_dashboard.html')
 
 
 
-def register_view(request):
-    if request.method == 'POST':
-        user_form = CustomUserCreationForm(request.POST)
-        if user_form.is_valid():
-            user = user_form.save(commit=False)
-            user.save()
+# def register_view(request):
+#     if request.method == 'POST':
+#         user_form = CustomUserCreationForm(request.POST)
+#         if user_form.is_valid():
+#             user = user_form.save(commit=False)
+#             user.save()
 
-            if user.user_type == 'STUDENT':
-                StudentProfile.objects.create(user=user)
-            elif user.user_type == 'FACULTY':
-                FacultyProfile.objects.create(user=user)
+#             if user.user_type == 'STUDENT':
+#                 StudentProfile.objects.create(user=user)
+#             elif user.user_type == 'FACULTY':
+#                 FacultyProfile.objects.create(user=user)
 
-            return redirect('login')
-    else:
-        user_form = CustomUserCreationForm()
-    return render(request, 'auth/register.html', {'form': user_form})
+#             return redirect('login')
+#     else:
+#         user_form = CustomUserCreationForm()
+#     return render(request, 'auth/register.html', {'form': user_form})
 
 
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
+        form = CustomAuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
