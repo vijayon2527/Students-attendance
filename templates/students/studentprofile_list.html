@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Profiles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        img {
+            max-width: 80px;
+            height: auto;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Student Profiles</h2>
+<a href="{% url 'students:studentprofile_create' %}">➕ Add Student</a>
+
+{% if profiles %}
+    <table>
+        <thead>
+            <tr>
+                <th>Photo</th>
+                <th>Username</th>
+                <th>Course</th>
+                <th>Aadhar</th>
+                <th>Father's Name</th>
+                <th>Mother's Name</th>
+                <th>Enrollment Date</th>
+                <th>Qualification</th>
+                <th>Placement</th>
+                <th>Company</th>
+                <th>Resume</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for profile in profiles %}
+            <tr>
+                <td>
+                    {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture">
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'students:studentprofile_detail' profile.pk %}">{{ profile.user.username }}</a></td>
+                <td>{{ profile.course.name }}</td>
+                <td>{{ profile.aadhar_number }}</td>
+                <td>{{ profile.father_name }}</td>
+                <td>{{ profile.mother_name }}</td>
+                <td>{{ profile.enrollment_date|date:"Y-m-d" }}</td>
+                <td>{{ profile.qualification }}</td>
+                <td>{{ profile.is_placed|yesno:"Placed,Not Placed" }}</td>
+                <td>
+                    {% if profile.is_placed %}
+                        {{ profile.placement_company }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>
+                    {% if profile.resume %}
+                        <a href="{{ profile.resume.url }}" target="_blank">📄 View</a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No student profiles found.</p>
+{% endif %}
+
+</body>
+</html>

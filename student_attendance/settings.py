@@ -40,12 +40,14 @@ INSTALLED_APPS = [
     'users',
     'courses',
     'materials',
-    'attendance'
+    'attendance',
+    'students',
+    'rest_framework',
 ]
 
 AUTH_USER_MODEL = 'users.User'
 
-LOGIN_URL = 'login'
+LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 

@@ -1,0 +1,78 @@
+{% extends "Dashboards/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="card shadow-sm mt-4">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">🎓 Filter Students by Course</h4>
+    </div>
+    <div class="card-body">
+      <form method="get" action="{% url 'students:student_courses' %}" class="row g-3">
+        <div class="col-md-6">
+          <label for="course_id" class="form-label">Select Course:</label>
+          <select name="course_id" id="course_id" class="form-select" required>
+            <option value="">-- Choose a Course --</option>
+            {% for course in courses %}
+              <option value="{{ course.id }}" {% if request.GET.course_id == course.id|stringformat:"s" %}selected{% endif %}>
+                {{ course.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6 d-flex align-items-end">
+          <button type="submit" class="btn btn-success w-100">👀 View Students</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if students %}
+  <div class="card shadow-sm mt-4">
+    <div class="card-header bg-success text-white">
+      <h5 class="mb-0">📋 Student List</h5>
+    </div>
+    <div class="card-body table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">👤 Name</th>
+            <th scope="col">✉️ Email</th>
+            <th scope="col">📚 Course</th>
+            <th scope="col">🏆 Placed</th>
+            <th scope="col">🏢 Company</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+          <tr>
+            <td>{{ student.user.username }}</td>
+            <td>{{ student.user.email }}</td>
+            <td>{{ student.course.name }}</td>
+            <td>
+              {% if student.is_placed %}
+                <span class="badge bg-success">Yes</span>
+              {% else %}
+                <span class="badge bg-danger">No</span>
+              {% endif %}
+            </td>
+            <td>
+                {% if student.resume %}
+                    <a href="{{ student.resume.url }}" target="_blank">📄 View</a>
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% elif request.GET.course_id %}
+    <div class="alert alert-warning mt-4" role="alert">
+      🚫 No students found for the selected course.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

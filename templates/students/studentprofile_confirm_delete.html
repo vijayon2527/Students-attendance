@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confirm Delete - {{ object.user.username }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .delete-card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      max-width: 400px;
+      text-align: center;
+    }
+    h2 {
+      color: #dc3545;
+    }
+    p {
+      margin-bottom: 25px;
+      font-size: 16px;
+    }
+    button, a {
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    button {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+    }
+    button:hover {
+      background-color: #c82333;
+    }
+    a {
+      background-color: #6c757d;
+      color: white;
+    }
+    a:hover {
+      background-color: #5a6268;
+    }
+  </style>
+</head>
+<body>
+  <div class="delete-card">
+    <h2>🗑 Confirm Delete</h2>
+    <p>Are you sure you want to delete the profile of <strong>{{ object.user.username }}</strong>?</p>
+
+    <form method="post" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit">Yes, Delete</button>
+    </form>
+
+    <a href="{% url 'students:studentprofile_detail' object.pk %}">Cancel</a>
+  </div>
+</body>
+</html>

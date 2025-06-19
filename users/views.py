@@ -14,6 +14,15 @@ def admin_dashboard(request):
 
 
 
+def student_dashboard(request):
+    return render(request, 'Dashboards/student_dashboard.html')
+
+
+@login_required
+def faculty_dashboard(request):
+    return render(request, 'Dashboards/faculty_dashboard.html')
+
+
 def register_view(request):
     if request.method == 'POST':
         user_form = CustomUserCreationForm(request.POST)
@@ -26,7 +35,7 @@ def register_view(request):
             elif user.user_type == 'FACULTY':
                 FacultyProfile.objects.create(user=user)
 
-            return redirect('login')
+            return redirect('users:login')
     else:
         user_form = CustomUserCreationForm()
     return render(request, 'auth/register.html', {'form': user_form})
@@ -41,11 +50,11 @@ def login_view(request):
 
             # Redirect to appropriate dashboard
             if user.user_type == 'ADMIN':
-                return redirect('admin_dashboard')
+                return redirect('users:admin_dashboard')
             elif user.user_type == 'FACULTY':
-                return redirect('faculty_dashboard')
+                return redirect('users:faculty_dashboard')
             elif user.user_type == 'STUDENT':
-                return redirect('student_dashboard')
+                return redirect('users:student_dashboard')
     else:
         form = AuthenticationForm()
     return render(request, 'auth/login.html', {'form': form})
@@ -54,7 +63,7 @@ def login_view(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('users:login')
 
 
 @login_required
@@ -70,7 +79,7 @@ def edit_user(request, user_id):
         form = CustomUserEditForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('users_list')
+            return redirect('users:users_list')
     else:
         form = CustomUserEditForm(instance=user)
     return render(request, 'Admin/update_user.html', {'form': form, 'user': user})
@@ -79,4 +88,4 @@ def edit_user(request, user_id):
 def delete_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
     user.delete()
-    return redirect('users_list')
+    return redirect('users:users_list')
