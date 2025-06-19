@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Profile - {{ profile.user.username }}</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background-color: #fff;
+      width: 100%;
+      max-width: 800px;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card img {
+      max-width: 150px;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+      margin: 0 auto 20px;
+    }
+
+    .card h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .info-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .info-group p {
+      flex: 1 1 45%;
+      margin: 6px 0;
+      color: #555;
+    }
+
+    .actions {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .actions a {
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 14px;
+      margin: 0 8px;
+      display: inline-block;
+    }
+
+    .edit-btn {
+      background-color: #28a745;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+    }
+
+    .resume-link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .resume-link a {
+      color: #007BFF;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>{{ profile.user.username }}</h2>
+
+    {% if profile.profile_picture %}
+      <img src="{{ profile.profile_picture.url }}" alt="Profile Picture">
+    {% endif %}
+
+    <div class="info-group">
+      <p><strong>Full Name:</strong> {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+      <p><strong>Email:</strong> {{ profile.user.email }}</p>
+      <p><strong>Phone Number:</strong> {{ profile.user.phone_number }}</p>
+      <p><strong>Gender:</strong> {{ profile.user.gender }}</p>
+      <p><strong>Date of Birth:</strong> {{ profile.user.date_of_birth }}</p>
+      <p><strong>Address:</strong> {{ profile.user.address }}</p>
+      <p><strong>Course:</strong> {{ profile.course.name }}</p>
+      <p><strong>Aadhar Number:</strong> {{ profile.aadhar_number }}</p>
+      <p><strong>Father's Name:</strong> {{ profile.father_name }}</p>
+      <p><strong>Mother's Name:</strong> {{ profile.mother_name }}</p>
+      <p><strong>Enrollment Date:</strong> {{ profile.enrollment_date|date:"Y-m-d" }}</p>
+      <p><strong>Qualification:</strong> {{ profile.qualification }}</p>
+      <p><strong>Placed:</strong> {{ profile.is_placed|yesno:"Yes,No" }}</p>
+
+      {% if profile.is_placed %}
+        <p><strong>Placement Company:</strong> {{ profile.placement_company }}</p>
+      {% endif %}
+    </div>
+
+    {% if profile.resume %}
+      <div class="resume-link">
+        <p><a href="{{ profile.resume.url }}" target="_blank">📄 View Resume</a></p>
+      </div>
+    {% endif %}
+
+    <div class="actions">
+      <a href="{% url 'students:studentprofile_update' profile.pk %}" class="edit-btn">✏ Edit</a>
+        <a href="{% url 'students:studentprofile_delete' profile.pk %}" class="delete-btn"
+        onclick="return confirm('Are you sure you want to delete this profile?');">🗑 Delete</a>
+
+    </div>
+  </div>
+
+</body>
+</html>

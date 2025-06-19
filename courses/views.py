@@ -18,7 +18,7 @@ def course_create(request):
         form = CourseForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('course_list')
+            return redirect('courses:course_list')
     else:
         form = CourseForm()
     return render(request, 'Admin/course_create.html', {'form': form, 'title': 'Create Course'})
@@ -29,7 +29,7 @@ def course_update(request, pk):
     form = CourseForm(request.POST or None, instance=course)
     if form.is_valid():
         form.save()
-        return redirect('course_list')
+        return redirect('courses:course_list')
     return render(request, 'Admin/course_create.html', {'form': form, 'title': 'Update Course'})
 
 @user_passes_test(is_admin)
@@ -37,5 +37,5 @@ def course_delete(request, pk):
     course = get_object_or_404(Course, pk=pk)
     if request.method == 'POST':
         course.delete()
-        return redirect('course_list')
+        return redirect('courses:course_list')
     return render(request, 'Admin/course_confirm_delete.html', {'course': course})

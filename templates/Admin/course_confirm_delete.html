@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "Dashboards/base.html" %}
 {% block title %}Delete Course{% endblock %}
 {% block content %}
 <div class="container mt-4">
@@ -7,7 +7,7 @@
   <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Yes, Delete</button>
-    <a href="{% url 'course_list' %}" class="btn btn-secondary">Cancel</a>
+    <a href="{% url 'courses:course_list' %}" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
 {% endblock %}
