@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
+
 class User(AbstractUser):
     USER_TYPE_CHOICES = (
         ('ADMIN', 'Admin'),
@@ -43,3 +44,6 @@ class StudentProfile(models.Model):
 
 class FacultyProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    course = models.ForeignKey('courses.Course', on_delete=models.SET_NULL, null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='faculty_profiles/', blank=True, null=True)
+

@@ -79,7 +79,7 @@
 
     $('#firstname').editable({
       validate: function(value) {
-        if ($.trim(value) === '') return 'This field is required';
+        if ($.trim(value) === '') return ' is required';
       }
     });
 

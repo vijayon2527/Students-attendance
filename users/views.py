@@ -4,9 +4,22 @@ from .forms import CustomUserCreationForm, StudentProfileForm, FacultyProfileFor
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import *
+from .forms import CustomUserEditForm
+from django.shortcuts import render, redirect
+from .forms import CustomUserCreationForm
 from .forms import *
 
-from courses.models import Course
+def register_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Update with your actual login view name
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'auth/register.html', {'form': form})
+
+
 
 def home_view(request):
     return render(request, 'pages/Home.html')
@@ -39,22 +52,22 @@ def student_dashboard(request):
 
 
 
-def register_view(request):
-    if request.method == 'POST':
-        user_form = CustomUserCreationForm(request.POST)
-        if user_form.is_valid():
-            user = user_form.save(commit=False)
-            user.save()
+# def register_view(request):
+#     if request.method == 'POST':
+#         user_form = CustomUserCreationForm(request.POST)
+#         if user_form.is_valid():
+#             user = user_form.save(commit=False)
+#             user.save()
 
-            if user.user_type == 'STUDENT':
-                StudentProfile.objects.create(user=user)
-            elif user.user_type == 'FACULTY':
-                FacultyProfile.objects.create(user=user)
+#             if user.user_type == 'STUDENT':
+#                 StudentProfile.objects.create(user=user)
+#             elif user.user_type == 'FACULTY':
+#                 FacultyProfile.objects.create(user=user)
 
-            return redirect('login')
-    else:
-        user_form = CustomUserCreationForm()
-    return render(request, 'auth/register.html', {'form': user_form})
+#             return redirect('login')
+#     else:
+#         user_form = CustomUserCreationForm()
+#     return render(request, 'auth/register.html', {'form': user_form})
 
 
 def login_view(request):
