@@ -4,7 +4,7 @@ from .forms import CustomUserCreationForm, StudentProfileForm, FacultyProfileFor
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import *
-from .forms import CustomUserEditForm
+from .forms import *
 
 from courses.models import Course
 
@@ -26,6 +26,11 @@ def courses_view(request):
 @login_required
 def admin_dashboard(request):
     return render(request, 'Dashboards/admin_dashboard.html')
+
+
+@login_required
+def faculty_dashboard(request):
+    return render(request, 'Dashboards/faculty_dashboard.html')
 
 
 @login_required
@@ -54,7 +59,7 @@ def register_view(request):
 
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
+        form = CustomAuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)

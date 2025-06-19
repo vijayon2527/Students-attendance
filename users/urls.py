@@ -6,7 +6,8 @@ urlpatterns = [
     path('about/',about_view, name='about'),
     path('courses/',courses_view, name='courses'),
     path('contact/',contact_view, name='contact'),
-    path('admin/dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('admin_dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('faculty_dashboard/', faculty_dashboard, name='faculty_dashboard'),
     path('student/dashboard/', student_dashboard, name='student_dashboard'),
 
     path('register/', register_view, name='register'),
