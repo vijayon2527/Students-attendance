@@ -5,6 +5,18 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import CustomUserEditForm
+from django.shortcuts import render, redirect
+from .forms import CustomUserCreationForm
+
+def register_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Update with your actual login view name
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'auth/register.html', {'form': form})
 
 
 
@@ -12,24 +24,9 @@ from .forms import CustomUserEditForm
 def admin_dashboard(request):
     return render(request, 'Dashboards/admin_dashboard.html')
 
-
-
-def register_view(request):
-    if request.method == 'POST':
-        user_form = CustomUserCreationForm(request.POST)
-        if user_form.is_valid():
-            user = user_form.save(commit=False)
-            user.save()
-
-            if user.user_type == 'STUDENT':
-                StudentProfile.objects.create(user=user)
-            elif user.user_type == 'FACULTY':
-                FacultyProfile.objects.create(user=user)
-
-            return redirect('login')
-    else:
-        user_form = CustomUserCreationForm()
-    return render(request, 'auth/register.html', {'form': user_form})
+@login_required
+def student_dashboard(request):
+    return render(request, 'Dashboards/student_dashboard.html')
 
 
 def login_view(request):
