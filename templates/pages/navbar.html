@@ -1,0 +1,126 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow">
+  <div class="container py-2">
+    <!-- Logo and Toggler -->
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+      <img src="{% static 'assets/images/faces/agp.jpg' %}" alt="AGPHR" width="40" class="me-2">
+      <strong>Student Attendance</strong>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Links -->
+    <div class="collapse navbar-collapse" id="navbarMenu">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">About</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'courses' %}active{% endif %}" href="{% url 'courses' %}">Courses</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">Contact</a>
+        </li>
+
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a href="{% url 'login' %}" class="btn btn-primary btn-sm ms-2">Login</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+{% block extra_css %}
+
+<style>
+.navbar {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* Brand Logo */
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+/* Nav links */
+.navbar-nav .nav-link {
+  color: #333;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus,
+.navbar-nav .nav-link.active {
+  color: #0056b3;
+  background-color: rgba(0, 123, 255, 0.1);
+  border-radius: 5px;
+}
+
+/* Dropdowns */
+.dropdown-menu {
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  padding: 0.5rem 0;
+  border: none;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1.2rem;
+  color: #333;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #0056b3;
+  border-left: 3px solid #007bff;
+}
+
+/* Navbar toggler icon */
+.navbar-toggler {
+  border: none;
+  outline: none;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+/* Optional: Button styling */
+.btn.btn-primary {
+  font-size: 0.875rem;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* Optional: Fixed top padding fix for body */
+body {
+  padding-top: 70px; /* adjust if your navbar height is different */
+}
+</style>
+{% endblock %}

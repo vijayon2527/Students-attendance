@@ -18,15 +18,50 @@ def register_view(request):
         form = CustomUserCreationForm()
     return render(request, 'auth/register.html', {'form': form})
 
+from courses.models import Course
+
+def home_view(request):
+    return render(request, 'pages/Home.html')
+
+def about_view(request):
+    return render(request, 'pages/About.html')
+
+def contact_view(request):
+    return render(request, 'pages/Contact.html')
+
+
+def courses_view(request):
+    return render(request, 'pages/Courses.html')
+
 
 
 @login_required
 def admin_dashboard(request):
     return render(request, 'Dashboards/admin_dashboard.html')
 
+
 @login_required
 def student_dashboard(request):
     return render(request, 'Dashboards/student_dashboard.html')
+
+
+
+def register_view(request):
+    if request.method == 'POST':
+        user_form = CustomUserCreationForm(request.POST)
+        if user_form.is_valid():
+            user = user_form.save(commit=False)
+            user.save()
+
+            if user.user_type == 'STUDENT':
+                StudentProfile.objects.create(user=user)
+            elif user.user_type == 'FACULTY':
+                FacultyProfile.objects.create(user=user)
+
+            return redirect('login')
+    else:
+        user_form = CustomUserCreationForm()
+    return render(request, 'auth/register.html', {'form': user_form})
 
 
 def login_view(request):

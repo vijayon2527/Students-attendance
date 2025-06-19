@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - AGP Coaching Institute{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+  <div class="text-center mb-4">
+    <h2 class="fw-bold">About AGP Coaching Institute</h2>
+    <p class="text-muted fs-5">Empowering Students to Achieve Academic Excellence</p>
+  </div>
+
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <img src="{% static 'assets/images/faces/agphr.webp' %}" alt="AGP Coaching" class="img-fluid rounded shadow-sm">
+    </div>
+    <div class="col-md-6">
+      <p class="fs-5">
+        AGP Coaching Institute is a premier educational institution focused on nurturing young minds to excel in academics and beyond.
+        With a vision to build a generation of confident, well-informed students, we offer a curriculum that blends academic rigor
+        with practical knowledge and values-based learning.
+      </p>
+      <p class="fs-5">
+        Our faculty consists of passionate educators and subject experts who mentor, motivate, and inspire each student personally.
+        We believe in a holistic approach that addresses not just intellectual growth, but also emotional and social development.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <h4 class="fw-bold mb-3">Why Choose AGP?</h4>
+    <div class="row">
+      <div class="col-md-6">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">✔ Highly Experienced and Qualified Faculty</li>
+          <li class="list-group-item">✔ Personalized Mentoring and Doubt Resolution</li>
+          <li class="list-group-item">✔ State-of-the-Art Classrooms and Digital Tools</li>
+          <li class="list-group-item">✔ Regular Assessments and Feedback System</li>
+          <li class="list-group-item">✔ Interactive Learning Environment</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">✔ Focus on Conceptual Understanding</li>
+          <li class="list-group-item">✔ Parent-Teacher Collaboration</li>
+          <li class="list-group-item">✔ Affordable Fees with Quality Education</li>
+          <li class="list-group-item">✔ Courses for All Academic Levels</li>
+          <li class="list-group-item">✔ Proven Results and Success Stories</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-5 text-center">
+    <h4 class="fw-bold">Join Us Today!</h4>
+    <p class="fs-5">Be a part of the AGP Coaching Institute family and begin your journey towards academic excellence and personal growth.</p>
+    <a href="{% url 'contact' %}" class="btn btn-primary btn-lg mt-2">Contact Us</a>
+  </div>
+</div>
+{% endblock %}
