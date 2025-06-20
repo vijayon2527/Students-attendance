@@ -18,4 +18,6 @@ urlpatterns = [
     path('users-list/', users_list, name='users_list'),
     path('users/edit/<int:user_id>/', edit_user, name='edit_user'),
     path('users/delete/<int:user_id>/', delete_user, name='delete_user'),
+
+     path('faculty/students/', faculty_students, name='faculty_students'),
 ]

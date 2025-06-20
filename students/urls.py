@@ -5,13 +5,14 @@ from .views import (
     StudentProfileDetailView,
     StudentProfileUpdateView,
     StudentProfileDeleteView,  
-    StudentsByCourseView
+    StudentsByCourseView,
+    student_profile_view
 )
 
 app_name='students'
 
 urlpatterns = [
-    path('students/', StudentProfileListView.as_view(), name='studentprofile_list'),
+    path('students/', student_profile_view, name='studentprofile_list'),
     path('students/create/', StudentProfileCreateView.as_view(), name='studentprofile_create'),
     path('students/<int:pk>/', StudentProfileDetailView.as_view(), name='studentprofile_detail'),
     path('students/<int:pk>/edit/', StudentProfileUpdateView.as_view(), name='studentprofile_update'),

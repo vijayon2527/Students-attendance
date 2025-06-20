@@ -7,3 +7,10 @@ class Attendance(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     date = models.DateField()
     status = models.CharField(max_length=10, choices=(('Present', 'Present'), ('Absent', 'Absent')))
+
+    
+    class Meta:
+        unique_together = ('student', 'course', 'date')  # avoid duplicate attendance for same day
+
+    def __str__(self):
+        return f"{self.student.get_full_name()} - {self.date} - {self.status}"

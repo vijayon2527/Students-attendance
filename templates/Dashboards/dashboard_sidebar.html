@@ -10,35 +10,31 @@
   </div>
 
   <ul class="nav">
-    <li class="nav-item profile">
-    </li>
-
-    <li class="nav-item nav-category">
-      <span class="nav-link">Navigation</span>
-    </li>
+    <li class="nav-item profile"></li>
+    <li class="nav-item nav-category"><span class="nav-link">Navigation</span></li>
 
     {% if request.user.is_authenticated %}
       {% if request.user.user_type == 'ADMIN' %}
         <!-- ADMIN SIDEBAR -->
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
           <a class="nav-link" href="{% url 'users:admin_dashboard' %}">
             <span class="menu-icon"><i class="mdi mdi-speedometer"></i></span>
             <span class="menu-title">Admin Dashboard</span>
           </a>
         </li>
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'users_list' %}active{% endif %}">
           <a class="nav-link" href="{% url 'users:users_list' %}">
             <span class="menu-icon"><i class="mdi mdi-account-multiple"></i></span>
             <span class="menu-title">Users List</span>
           </a>
         </li>
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'course_list' %}active{% endif %}">
           <a class="nav-link" href="{% url 'courses:course_list' %}">
             <span class="menu-icon"><i class="mdi mdi-book-open-page-variant"></i></span>
             <span class="menu-title">Courses</span>
           </a>
         </li>
-         <li class="nav-item menu-items">
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'student_courses' %}active{% endif %}">
           <a class="nav-link" href="{% url 'students:student_courses' %}">
             <span class="menu-icon"><i class="mdi mdi-book-open-page-variant"></i></span>
             <span class="menu-title">Students</span>
@@ -47,20 +43,20 @@
 
       {% elif request.user.user_type == 'FACULTY' %}
         <!-- FACULTY SIDEBAR -->
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'faculty_dashboard' %}active{% endif %}">
           <a class="nav-link" href="{% url 'users:faculty_dashboard' %}">
             <span class="menu-icon"><i class="mdi mdi-speedometer"></i></span>
             <span class="menu-title">Faculty Dashboard</span>
           </a>
         </li>
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="#">
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'faculty_students' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'users:faculty_students' %}">
             <span class="menu-icon"><i class="mdi mdi-account-school"></i></span>
             <span class="menu-title">My Students</span>
           </a>
         </li>
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="#">
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'mark-attendance' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'mark-attendance' %}">
             <span class="menu-icon"><i class="mdi mdi-calendar-check"></i></span>
             <span class="menu-title">Mark Attendance</span>
           </a>
@@ -68,20 +64,20 @@
 
       {% elif request.user.user_type == 'STUDENT' %}
         <!-- STUDENT SIDEBAR -->
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
           <a class="nav-link" href="{% url 'users:student_dashboard' %}">
             <span class="menu-icon"><i class="mdi mdi-speedometer"></i></span>
             <span class="menu-title">Student Dashboard</span>
           </a>
         </li>
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'studentprofile_list' %}active{% endif %}">
           <a class="nav-link" href="{% url 'students:studentprofile_list' %}">
-            <span class="menu-icon"><i class="mdi mdi-calendar-check"></i></span>
+            <span class="menu-icon"><i class="mdi mdi-account-box"></i></span>
             <span class="menu-title">Student Profile</span>
           </a>
         </li>
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="#">
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'student-attendance' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'student-attendance' %}">
             <span class="menu-icon"><i class="mdi mdi-calendar-check"></i></span>
             <span class="menu-title">View Attendance</span>
           </a>

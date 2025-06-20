@@ -1,13 +1,10 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .forms import CustomUserCreationForm, StudentProfileForm, FacultyProfileForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .models import *
-from .forms import CustomUserEditForm
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm
 from .forms import *
+from .models import *
 
 
 
@@ -32,21 +29,43 @@ def admin_dashboard(request):
     return render(request, 'Dashboards/admin_dashboard.html')
 
 
-@login_required
 def faculty_dashboard(request):
-    return render(request, 'Dashboards/faculty_dashboard.html')
+    faculty_user = request.user  
+    course = Course.objects.filter(faculty=faculty_user).first()
+    students = StudentProfile.objects.filter(course=course)
 
+    return render(request, "Dashboards/faculty_dashboard.html", {
+        "course": course,
+        "students": students,
+    })
 
 @login_required
 def student_dashboard(request):
-    return render(request, 'Dashboards/student_dashboard.html')
+    student_profile = StudentProfile.objects.get(user=request.user)
+    return render(request, 'Dashboards/student_dashboard.html', {
+        'user': request.user,
+        'student_profile': student_profile
+    })
+
+
+@login_required
+def faculty_students(request):
+    faculty_user = request.user  # must have user_type='FACULTY'
+    course = Course.objects.filter(faculty=faculty_user).first()
+    students = StudentProfile.objects.filter(course=course) if course else []
+
+    return render(request, "students/faculty_students.html", {
+        "course": course,
+        "students": students
+    })
+
 
 def register_view(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST, request.FILES)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')  # Update with your actual login view name
+            return redirect('users:login')
     else:
         form = CustomUserCreationForm()
     return render(request, 'auth/register.html', {'form': form})
@@ -94,6 +113,7 @@ def edit_user(request, user_id):
     else:
         form = CustomUserEditForm(instance=user)
     return render(request, 'Admin/update_user.html', {'form': form, 'user': user})
+
 
 @login_required
 def delete_user(request, user_id):

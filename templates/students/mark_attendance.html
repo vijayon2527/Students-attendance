@@ -1,0 +1,81 @@
+{% extends 'Dashboards/base.html' %}
+{% load custom_filters %}  {# Make sure this loads your custom template tag #}
+
+{% block title %}Mark Attendance{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h3 class="text-warning">Mark Attendance for {{ course.name }}</h3>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% else %}
+    <form method="POST">
+      {% csrf_token %}
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h5 class="mb-0">Date: <span class="text-primary">{{ today }}</span></h5>
+        <button type="submit" class="btn btn-success">Submit Attendance</button>
+      </div>
+
+      <table class="table table-bordered text-white">
+        <thead class="bg-dark">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone No</th>
+            <th>Present</th>
+            <th>Total</th>
+            <th>percentage %</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+            <tr>
+              <td>
+                {% if student.user.id not in marked_students %}
+                  <input type="checkbox" name="present_{{ student.user.id }}" class="present-check me-2">
+                {% endif %}
+                {{ forloop.counter }}
+              </td>
+              <td>{{ student.user.username }}</td>
+              <td>{{ student.user.email }}</td>
+              <td>{{ student.user.phone_number }}</td>
+             
+              {% with stats=student_stats|get_item:student.user.id %}
+                <td>{{ stats.present_days }}</td>
+                <td>{{ stats.total_days }}</td>
+                <td>{{ stats.percentage }}%</td>
+              {% endwith %}
+               <td>
+                {% if student.user.id in marked_students %}
+                  <span class="badge bg-success">Marked</span>
+                {% else %}
+                  <span class="badge bg-warning text-dark">Pending</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('.present-check');
+
+    // Optional: implement "select all" functionality if needed
+    const selectAll = document.getElementById('selectAll');
+    if (selectAll) {
+      selectAll.addEventListener('change', function () {
+        checkboxes.forEach(cb => cb.checked = selectAll.checked);
+      });
+    }
+  });
+</script>
+{% endblock %}

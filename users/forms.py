@@ -4,42 +4,46 @@ from .models import User, StudentProfile, FacultyProfile
 from django.contrib.auth.forms import UserChangeForm
 from courses.models import Course
 from django.contrib.auth.forms import AuthenticationForm
+from courses.models import Course
+import random
+import string
 
-
+def generate_student_id():
+    return 'AGP' + ''.join(random.choices(string.digits, k=6))
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     phone_number = forms.CharField(required=True, max_length=15)
-    # Removed user_type field — it will be set in save()
-    
-    course = forms.ModelChoiceField(
-        queryset=Course.objects.all(),
-        required=True,
-        widget=forms.Select(attrs={'class': 'form-select'})
-    )
-    profile_picture = forms.ImageField(required=False)
+    gender = forms.ChoiceField(choices=User._meta.get_field('gender').choices, required=True)
+    course = forms.ModelChoiceField(queryset=Course.objects.all(), required=True)
 
     class Meta:
         model = User
-        fields = ['username', "user_type",'email', 'phone_number', 'password1', 'password2', 'course', 'profile_picture']
+        fields = ['username', 'email', 'phone_number', 'gender', 'password1', 'password2', 'course']
 
-    def clean_course(self):
-        course = self.cleaned_data.get('course')
-        if not course:
-            raise forms.ValidationError("Please select a valid course.")
-        return course
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if len(username) < 3:
+            raise forms.ValidationError("Username must be at least 3 characters long.")
+        return username
 
     def clean_email(self):
-        email = self.cleaned_data.get('email')
+        email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Email is already in use.")
+            raise forms.ValidationError("This email is already registered.")
         return email
 
     def clean_phone_number(self):
-        phone = self.cleaned_data.get('phone_number')
+        phone = self.cleaned_data['phone_number']
         if not phone.isdigit():
             raise forms.ValidationError("Phone number must contain only digits.")
         return phone
+
+    def clean_password1(self):
+        password1 = self.cleaned_data.get("password1")
+        if len(password1) < 3:
+            raise forms.ValidationError("Password must be at least 3 characters long.")
+        return password1
 
     def clean(self):
         cleaned_data = super().clean()
@@ -51,14 +55,22 @@ class CustomUserCreationForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.user_type = 'STUDENT'  # Force user type to STUDENT
-        user.phone_number = self.cleaned_data.get('phone_number')
+        user.user_type = 'STUDENT'
+        user.phone_number = self.cleaned_data['phone_number']
+        user.gender = self.cleaned_data['gender']
+        user.email = self.cleaned_data['email']
+
         if commit:
             user.save()
+            # Generate and ensure unique student_id
+            student_id = generate_student_id()
+            while StudentProfile.objects.filter(student_id=student_id).exists():
+                student_id = generate_student_id()
+
             StudentProfile.objects.create(
                 user=user,
-                course=self.cleaned_data.get('course'),
-                profile_picture=self.cleaned_data.get('profile_picture')
+                course=self.cleaned_data['course'],
+                student_id=student_id
             )
         return user
 

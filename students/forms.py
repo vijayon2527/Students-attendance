@@ -8,3 +8,4 @@ class StudentProfileForm(forms.ModelForm):
                   'father_name', 'mother_name', 'enrollment_date',
                   'qualification', 'placement_company']
         
+

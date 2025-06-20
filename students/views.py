@@ -6,9 +6,27 @@ from users.models import StudentProfile
 from .forms import StudentProfileForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from rest_framework.permissions import IsAdminUser
-from rest_framework import generics
 from courses.models import Course
+
+
+
+
+@login_required
+def student_profile_view(request):
+    student_profile = get_object_or_404(StudentProfile, user=request.user)
+
+    if request.method == 'POST':
+        form = StudentProfileForm(request.POST, request.FILES, instance=student_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('students:studentprofile_list')  
+    else:
+        form = StudentProfileForm(instance=student_profile)
+
+    return render(request, 'students/studentprofile_list.html', {
+        'student_profile': student_profile,
+        'form': form
+    })
 
 
 

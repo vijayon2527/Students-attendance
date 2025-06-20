@@ -1,26 +1,90 @@
-{% extends 'base.html' %}
+{% extends "Dashboards/base.html" %}
 {% load form_tags %}
+{% load widget_tweaks %}
+{% load static %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}Edit User - AGPHR{% endblock %}
+
+{% block extra_css %}
+<style>
+  body {
+    background-color: #343a40;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .card {
+    background-color: #212529;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    color: #fff;
+  }
+
+  .card-header {
+    background-color: #0d6efd;
+    color: white;
+    border-bottom: none;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    padding: 20px 24px;
+  }
+
+  .form-label {
+    color: #f8f9fa;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .form-control,
+  .form-select {
+    background-color: #343a40;
+    color: #f8f9fa;
+    border: 1px solid #495057;
+    border-radius: 8px;
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    background-color: #3e444a;
+    color: #fff;
+    border-color: #0d6efd;
+    box-shadow: none;
+  }
+
+  .btn-success {
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px 20px;
+  }
+
+  .btn-secondary {
+    border-radius: 8px;
+    font-weight: 500;
+  }
+
+  .container {
+    margin-top: 60px;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-4 col-md-8">
+<div class="container col-md-8">
   <div class="card">
-    <div class="card-header bg-primary text-white">
-      <h4>Edit User: {{ user.username }}</h4>
+    <div class="card-header">
+      <h4 class="mb-0">Edit User: {{ user.username }}</h4>
     </div>
     <div class="card-body">
-      <form method="post">
+      <form method="post" novalidate>
         {% csrf_token %}
-        
+
         <div class="mb-3">
           <label for="id_username" class="form-label">Username</label>
-          {{ form.username|add_class:"form-control" }}
+          {{ form.username|add_class:"form-control"|attr:"placeholder:Enter username" }}
         </div>
 
         <div class="mb-3">
           <label for="id_email" class="form-label">Email</label>
-          {{ form.email|add_class:"form-control" }}
+          {{ form.email|add_class:"form-control"|attr:"placeholder:Enter email" }}
         </div>
 
         <div class="mb-3">
@@ -30,7 +94,7 @@
 
         <div class="mb-3">
           <label for="id_phone_number" class="form-label">Phone Number</label>
-          {{ form.phone_number|add_class:"form-control" }}
+          {{ form.phone_number|add_class:"form-control"|attr:"placeholder:Enter phone number" }}
         </div>
 
         <div class="mb-3">
@@ -40,15 +104,15 @@
 
         <div class="mb-3">
           <label for="id_date_of_birth" class="form-label">Date of Birth</label>
-          {{ form.date_of_birth|add_class:"form-control" }}
+          {{ form.date_of_birth|add_class:"form-control"|attr:"placeholder:YYYY-MM-DD" }}
         </div>
 
         <div class="mb-3">
           <label for="id_address" class="form-label">Address</label>
-          {{ form.address|add_class:"form-control" }}
+          {{ form.address|add_class:"form-control"|attr:"placeholder:Enter address" }}
         </div>
 
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between mt-4">
           <button type="submit" class="btn btn-success">Save Changes</button>
           <a href="{% url 'users:users_list' %}" class="btn btn-secondary">Cancel</a>
         </div>

@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-
+import uuid
 
 class User(AbstractUser):
     USER_TYPE_CHOICES = (
@@ -25,6 +25,7 @@ class StudentProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey('courses.Course', on_delete=models.SET_NULL, null=True, blank=True)
 
+    student_id = models.CharField(max_length=20, unique=True, blank=True, null=True) 
     profile_picture = models.ImageField(upload_to='student_profiles/', blank=True, null=True)
     resume = models.FileField(upload_to='student_resumes/', blank=True, null=True)
     aadhar_number = models.CharField(max_length=12, unique=True, blank=True, null=True)
@@ -44,6 +45,8 @@ class StudentProfile(models.Model):
 
 class FacultyProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    course = models.ForeignKey('courses.Course', on_delete=models.SET_NULL, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='faculty_profiles/', blank=True, null=True)
 
+    def __str__(self):
+        return self.user.get_full_name()
+ 

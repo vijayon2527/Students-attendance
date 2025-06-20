@@ -1,104 +1,128 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Student Profiles</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-            padding: 20px;
-        }
-        h2 {
-            color: #333;
-        }
-        a {
-            text-decoration: none;
-            color: #007BFF;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-            vertical-align: top;
-        }
-        th {
-            background-color: #f0f0f0;
-        }
-        img {
-            max-width: 80px;
-            height: auto;
-            border-radius: 6px;
-        }
-    </style>
-</head>
-<body>
+{% extends 'Dashboards/base.html' %}
+{% load static %}
+{% block title %}Student Profile{% endblock %}
 
-<h2>Student Profiles</h2>
-<a href="{% url 'students:studentprofile_create' %}">➕ Add Student</a>
+{% block content %}
+<div class="container py-2">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow border-0 rounded-4 overflow-hidden">
 
-{% if profiles %}
-    <table>
-        <thead>
-            <tr>
-                <th>Photo</th>
-                <th>Username</th>
-                <th>Course</th>
-                <th>Aadhar</th>
-                <th>Father's Name</th>
-                <th>Mother's Name</th>
-                <th>Enrollment Date</th>
-                <th>Qualification</th>
-                <th>Placement</th>
-                <th>Company</th>
-                <th>Resume</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for profile in profiles %}
-            <tr>
-                <td>
-                    {% if profile.profile_picture %}
-                        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture">
-                    {% else %}
-                        N/A
-                    {% endif %}
-                </td>
-                <td><a href="{% url 'students:studentprofile_detail' profile.pk %}">{{ profile.user.username }}</a></td>
-                <td>{{ profile.course.name }}</td>
-                <td>{{ profile.aadhar_number }}</td>
-                <td>{{ profile.father_name }}</td>
-                <td>{{ profile.mother_name }}</td>
-                <td>{{ profile.enrollment_date|date:"Y-m-d" }}</td>
-                <td>{{ profile.qualification }}</td>
-                <td>{{ profile.is_placed|yesno:"Placed,Not Placed" }}</td>
-                <td>
-                    {% if profile.is_placed %}
-                        {{ profile.placement_company }}
-                    {% else %}
-                        N/A
-                    {% endif %}
-                </td>
-                <td>
-                    {% if profile.resume %}
-                        <a href="{{ profile.resume.url }}" target="_blank">📄 View</a>
-                    {% else %}
-                        N/A
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p>No student profiles found.</p>
-{% endif %}
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <!-- Profile Picture -->
+            {% if student_profile.profile_picture %}
+              <img src="{{ student_profile.profile_picture.url }}" alt="Profile Picture"
+                   class="rounded-circle shadow" width="150" height="150"
+                   style="object-fit: cover;">
+            {% else %}
+              <img src="{% static 'default-avatar.png' %}" alt="Default Avatar"
+                   class="rounded-circle shadow" width="150" height="150">
+            {% endif %}
+            <h3 class="mt-3 mb-0">{{ user.username }}</h3>
+            <p class="text-muted">{{ user.email }}</p>
+            <span class="badge bg-info">{{ user.get_user_type_display }}</span>
+          </div>
 
-</body>
-</html>
+          <!-- Stats Badges -->
+          <div class="d-flex justify-content-center gap-4 my-4 flex-wrap">
+            <div class="text-center">
+              <p class="mb-1"><i class="bi bi-telephone-fill me-1"></i>{{ user.phone_number }}</p>
+              <p class="mb-1"><i class="bi bi-gender-ambiguous me-1"></i>{{ user.gender }}</p>
+              <p class="mb-1"><i class="bi bi-calendar3 me-1"></i>DOB: {{ user.date_of_birth|default:"N/A" }}</p>
+            </div>
+            <div class="text-center">
+              <p class="mb-1"><i class="bi bi-geo-alt-fill me-1"></i>{{ user.address|default:"N/A" }}</p>
+              <p class="mb-1"><i class="bi bi-card-list me-1"></i>Student ID: {{ student_profile.student_id }}</p>
+              <p class="mb-1"><i class="bi bi-book-half me-1"></i>Course: {{ student_profile.course.name }}</p>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- Detailed Info -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <strong>Father's Name:</strong> {{ student_profile.father_name|default:"N/A" }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Mother's Name:</strong> {{ student_profile.mother_name|default:"N/A" }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Aadhar Number:</strong> {{ student_profile.aadhar_number|default:"N/A" }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Qualification:</strong> {{ student_profile.qualification|default:"N/A" }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Enrollment Date:</strong> {{ student_profile.enrollment_date|date:"Y-m-d" }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Placement Status:</strong>
+              {% if student_profile.is_placed %}
+                <span class="badge bg-success">Placed</span>
+              {% else %}
+                <span class="badge bg-warning text-dark">Not Placed</span>
+              {% endif %}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Company:</strong> {{ student_profile.placement_company|default:"N/A" }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Resume:</strong>
+              {% if student_profile.resume %}
+                <a href="{{ student_profile.resume.url }}" target="_blank" class="btn btn-outline-info btn-sm">📄 View</a>
+              {% else %}
+                N/A
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Edit Button -->
+          <div class="text-center mt-4">
+            <button class="btn btn-primary px-4" onclick="toggleForm()">Edit Profile</button>
+          </div>
+
+          <!-- Hidden Form (edit) -->
+         <form id="editForm" method="post" enctype="multipart/form-data" style="display: none;" class="mt-4">
+          {% csrf_token %}
+          <div class="row">
+            {% for field in form %}
+              <div class="col-md-6 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+
+                {% if field.name == 'course' %}
+                  <input type="text" class="form-control bg-warning" value="{{ student_profile.course.name }}" readonly>
+                {% else %}
+                  {{ field }}
+                {% endif %}
+
+                {% if field.errors %}
+                  <div class="text-danger small">{{ field.errors|join:', ' }}</div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-success px-4">Save Changes</button>
+            <button type="button" class="btn btn-secondary ms-2" onclick="toggleForm()">Cancel</button>
+          </div>
+        </form>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap Icons (if needed) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<script>
+  function toggleForm() {
+    const form = document.getElementById("editForm");
+    form.style.display = form.style.display === "none" ? "block" : "none";
+  }
+</script>
+{% endblock %}
