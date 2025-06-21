@@ -1,0 +1,50 @@
+{% extends "Dashboards/base.html" %}
+{% block title %}Manage Events{% endblock %}
+
+{% block content %}
+<div class="container mt-5 col-md-8">
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Create Course Event</h4>
+    </div>
+    <div class="card-body">
+      <form method="post">
+  {% csrf_token %}
+
+  <div class="mb-3">
+    <label for="id_course" class="form-label text-white">Course</label>
+    {{ form.course }}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_title" class="form-label">Title</label>
+    {{ form.title }}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_event_type" class="form-label">Event Type</label>
+    {{ form.event_type }}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_date" class="form-label">Date</label>
+    {{ form.date }}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_time" class="form-label">Time</label>
+    {{ form.time }}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_description" class="form-label">Description</label>
+    {{ form.description }}
+  </div>
+
+  <button type="submit" class="btn btn-success">Add Event</button>
+</form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

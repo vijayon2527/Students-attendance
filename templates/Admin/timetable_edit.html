@@ -1,0 +1,20 @@
+{% extends "Dashboards/base.html" %}
+{% block title %}Edit Timetable Entry{% endblock %}
+
+{% block content %}
+<div class="container mt-5 col-md-6">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h5>Edit Timetable Entry</h5>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Update</button>
+        <a href="{% url 'admin_course_timetable' entry.course.id %}" class="btn btn-secondary">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

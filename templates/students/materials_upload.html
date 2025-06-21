@@ -1,0 +1,37 @@
+{% extends "Dashboards/base.html" %}
+{% load widget_tweaks %}
+{% block title %}Upload Material{% endblock %}
+
+{% block content %}
+<div class="container mt-5 col-md-6">
+  <div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">Upload Course Material</h4>
+      <a href="{% url 'materials:list' %}" class="btn btn-light btn-sm">← Back</a>
+    </div>
+    <div class="card-body">
+     <form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <div class="mb-3">
+    <label class="form-label" for="id_title">Title</label>
+    {{ form.title|add_class:"form-control" }}
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="id_material_type">Material Type</label>
+    {{ form.material_type|add_class:"form-select" }}
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="id_file">Upload File</label>
+    {{ form.file|add_class:"form-control" }}
+  </div>
+
+  <button type="submit" class="btn btn-success">Upload</button>
+</form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

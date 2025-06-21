@@ -1,0 +1,52 @@
+{% extends "Dashboards/base.html" %}
+{% block title %}Event List{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+  <!-- Header and Button aligned horizontally -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="mb-0 text-primary">📅 All Course Events</h3>
+    <a href="{% url 'students:manage_events' %}" class="btn btn-primary btn-sm">
+      📌 Create Events
+    </a>
+  </div>
+
+  {% if events %}
+  <table class="table table-bordered text-white">
+    <thead class="table-dark">
+      <tr>
+        <th>Course</th>
+        <th>Title</th>
+        <th>Type</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr>
+        <td>{{ event.course.name }}</td>
+        <td>{{ event.title }}</td>
+        <td>{{ event.event_type }}</td>
+        <td>{{ event.date }}</td>
+        <td>{{ event.time }}</td>
+        <td>{{ event.description }}</td>
+        <td>
+          <a href="{% url 'students:event_edit' event.id %}" class="btn btn-sm btn-warning">✏️ Edit</a>
+          <form method="post" action="{% url 'students:delete_event' event.id %}" style="display:inline-block;" onsubmit="return confirm('Delete this event?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger">🗑 Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No events available.</p>
+  {% endif %}
+</div>
+{% endblock %}

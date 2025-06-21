@@ -1,0 +1,46 @@
+{% extends "Dashboards/base.html" %}
+{% block title %}All Courses{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">📚 All Courses</h4>
+    </div>
+    <div class="card-body">
+      {% if courses %}
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped text-white">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Course Name</th>
+              <th>Description</th>
+              <th>Faculty</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for course in courses %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ course.name }}</td>
+              <td>{{ course.description }}</td>
+              <td>{{ course.faculty.username }}</td>
+              <td>
+                <a href="{% url 'students:admin_course_timetable' course.id %}" class="btn btn-sm btn-outline-primary">
+                  View Timetable
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-danger">No courses found.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

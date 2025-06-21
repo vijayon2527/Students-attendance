@@ -1,13 +1,14 @@
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView
 from django.urls import reverse_lazy
-from users.models import StudentProfile
-from .forms import StudentProfileForm
-from django.contrib.auth.decorators import login_required
+from users.models import *
+from .forms import *
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.utils.decorators import method_decorator
 from courses.models import Course
-
+from materials.models import *
+from .models import *  
 
 
 
@@ -29,47 +30,156 @@ def student_profile_view(request):
     })
 
 
+@login_required
+def student_materials_view(request):
+    if request.user.user_type != 'STUDENT':
+        return redirect('users:home')
 
-@method_decorator(login_required, name='dispatch')
-class StudentProfileListView(ListView):
-    model = StudentProfile
-    template_name = 'students/studentprofile_list.html'
-    context_object_name = 'profiles'
+    try:
+        profile = request.user.studentprofile
+        student_course = profile.course
+        materials = CourseMaterial.objects.filter(course=student_course).order_by('-uploaded_at')
+    except StudentProfile.DoesNotExist:
+        materials = []
 
-@method_decorator(login_required, name='dispatch')
-class StudentProfileDetailView(DetailView):
-    model = StudentProfile
-    template_name = 'students/studentprofile_detail.html'
-    context_object_name = 'profile'
-
-@method_decorator(login_required, name='dispatch')
-class StudentProfileCreateView(CreateView):
-    model = StudentProfile
-    form_class = StudentProfileForm
-    template_name = 'students/studentprofile_form.html'
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user  # Set user automatically
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse_lazy('students/studentprofile_list')
-
-@method_decorator(login_required, name='dispatch')
-class StudentProfileUpdateView(UpdateView):
-    model = StudentProfile
-    form_class = StudentProfileForm
-    template_name = 'students/studentprofile_form.html'
-
-    def get_success_url(self):
-        return reverse_lazy('students/studentprofile_list')
+    return render(request, 'students/student_materials.html', {'materials': materials})
 
 
-@method_decorator(login_required, name='dispatch')
-class StudentProfileDeleteView(DeleteView):
-    model = StudentProfile
-    template_name = 'students/studentprofile_confirm_delete.html'
-    success_url = reverse_lazy('students:studentprofile_list')  # note namespace 'students:'
+def is_admin_or_faculty(user):
+    return user.is_authenticated and user.user_type in ['ADMIN', 'FACULTY']
+
+
+@login_required
+@user_passes_test(is_admin_or_faculty)
+def manage_timetable(request):
+    entries = TimetableEntry.objects.all()
+    form = TimetableEntryForm()
+    if request.method == 'POST':
+        form = TimetableEntryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_timetable')
+    return render(request, 'admin/edit_timetable.html', {'form': form, 'entries': entries})
+
+
+@login_required
+@user_passes_test(is_admin_or_faculty)
+def manage_events(request):
+    events = CourseEvent.objects.all()
+    form = CourseEventForm()
+    if request.method == 'POST':
+        form = CourseEventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('students:event_list')
+    return render(request, 'Admin/manage_events.html', {'form': form, 'events': events})
+
+
+@login_required
+@user_passes_test(is_admin_or_faculty)
+def event_list(request):
+    events = CourseEvent.objects.all().order_by('-date')
+    return render(request, 'Admin/event_list.html', {'events': events})
+
+
+@login_required
+@user_passes_test(is_admin_or_faculty)
+def event_edit(request, event_id):
+    event = get_object_or_404(CourseEvent, id=event_id)
+    form = CourseEventForm(request.POST or None, instance=event)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('students:event_list')
+    return render(request, 'Admin/event_edit.html', {'form': form, 'event': event})
+
+
+@login_required
+@user_passes_test(is_admin_or_faculty)
+def delete_event(request, event_id):
+    event = get_object_or_404(CourseEvent, id=event_id)
+    course_id = event.course.id
+    event.delete()
+    return redirect('manage_events', course_id=course_id)
+
+
+DAY_ORDER = {
+    'Monday': 1,
+    'Tuesday': 2,
+    'Wednesday': 3,
+    'Thursday': 4,
+    'Friday': 5,
+    'Saturday': 6,
+}
+
+
+@login_required
+def student_schedule(request):
+    profile = request.user.studentprofile
+    course = profile.course
+
+    # Fetch and manually sort timetable by day order and start time
+    timetable = TimetableEntry.objects.filter(course=course)
+    timetable = sorted(timetable, key=lambda x: (DAY_ORDER.get(x.day, 99), x.start_time))
+
+    events = CourseEvent.objects.filter(course=course).order_by('date', 'time')
+
+    return render(request, 'students/student_schedule.html', {
+        'course': course,
+        'timetable': timetable,
+        'events': events
+    })
+
+
+def admin_course_list(request):
+    courses = Course.objects.all()
+    return render(request, 'Admin/admin_course_list.html', {'courses': courses})
+
+
+def admin_course_timetable(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    timetable = TimetableEntry.objects.filter(course=course)
+    students = StudentProfile.objects.filter(course=course)
+    return render(request, 'Admin/course_timetable.html', {
+        'course': course,
+        'timetable': timetable,
+        'students': students
+    })
+
+
+def create_timetable_entry(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    
+    if request.method == 'POST':
+        form = TimetableEntryForm(request.POST)
+        if form.is_valid():
+            timetable = form.save(commit=False)
+            timetable.course = course  # Associate course automatically
+            timetable.save()
+            return redirect('students:admin_course_timetable', course_id=course.id)
+    else:
+        form = TimetableEntryForm(initial={'course': course})
+
+    return render(request, 'Admin/create_timetable.html', {
+        'form': form,
+        'course': course
+    })
+
+
+def edit_timetable_entry(request, entry_id):
+    entry = get_object_or_404(TimetableEntry, id=entry_id)
+    
+    if request.method == 'POST':
+        form = TimetableEntryForm(request.POST, instance=entry)
+        if form.is_valid():
+            form.save()
+            return redirect('students:admin_course_timetable', course_id=entry.course.id)  # Adjust this name if needed
+    else:
+        form = TimetableEntryForm(instance=entry)
+
+    return render(request, 'Admin/edit_timetable.html', {
+        'form': form,
+        'entry': entry,
+    })
 
 
 class StudentsByCourseView(ListView):

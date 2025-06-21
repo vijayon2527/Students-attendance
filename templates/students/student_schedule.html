@@ -1,0 +1,97 @@
+{% extends "Dashboards/base.html" %}
+{% block title %}My Schedule{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+  <!-- Now the My Schedule section -->
+  <h2 class="mb-4 text-primary">
+    📘 My Schedule 
+    <small class="text-muted fs-5">— {{ course.name }}</small>
+  </h2>
+
+  <div class="mb-4">
+    <div class="card shadow">
+      <div class="card-body">
+        {% if timetable %}
+        <div class="table-responsive">
+          <table class="table table-bordered text-white align-middle">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Day</th>
+                <th>Subject</th>
+                <th>Time</th>
+                <th>Faculty</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in timetable %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><span class="badge bg-info">{{ entry.day }}</span></td>
+                <td>{{ entry.subject }}</td>
+                <td>{{ entry.start_time|time:"H:i" }} - {{ entry.end_time|time:"H:i" }}</td>
+                <td>{{ entry.faculty.username }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning mb-0">⏳ No timetable available yet.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  
+  <h2 class="mb-4 text-primary">
+    📅 Upcoming Events
+    <small class="text-muted fs-5">— {{ course.name }}</small>
+  </h2>
+
+  <!-- Upcoming Events FIRST -->
+  <div class="mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-info d-flex justify-content-between">
+        <span>📅 Upcoming Events</span>
+      </div>
+      <div class="card-body">
+        {% if events %}
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle text-white">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for event in events %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ event.title }}</td>
+                <td><span class="badge bg-info text-dark">{{ event.event_type }}</span></td>
+                <td>{{ event.description }}</td>
+                <td>{{ event.date|date:"M d, Y" }}</td>
+                <td>{{ event.time|time:"H:i" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="alert alert-dark mb-0">📭 No upcoming events.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+
+</div>
+{% endblock %}

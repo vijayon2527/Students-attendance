@@ -40,6 +40,18 @@
             <span class="menu-title">Students</span>
           </a>
         </li>
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'admin_course_list' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'students:admin_course_list' %}">
+            <span class="menu-icon"><i class="mdi mdi-book-open-page-variant"></i></span>
+            <span class="menu-title">schedule</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'event_list' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'students:event_list' %}">
+            <span class="menu-icon"><i class="mdi mdi-book-open-page-variant"></i></span>
+            <span class="menu-title">Events</span>
+          </a>
+        </li>
 
       {% elif request.user.user_type == 'FACULTY' %}
         <!-- FACULTY SIDEBAR -->
@@ -61,6 +73,13 @@
             <span class="menu-title">Mark Attendance</span>
           </a>
         </li>
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'list' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'materials:list' %}">
+            <span class="menu-icon"><i class="mdi mdi-calendar-check"></i></span>
+            <span class="menu-title">Materials Upload</span>
+          </a>
+        </li>
+
 
       {% elif request.user.user_type == 'STUDENT' %}
         <!-- STUDENT SIDEBAR -->
@@ -76,18 +95,25 @@
             <span class="menu-title">Student Profile</span>
           </a>
         </li>
-        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'student-attendance' %}active{% endif %}">
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'student_materials' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'students:student_materials' %}">
+            <span class="menu-icon"><i class="mdi mdi-book-open-page-variant"></i></span>
+            <span class="menu-title">Materials</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items {% if request.resolver_match.url_name == 'student_schedule' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'students:student_schedule' %}">
+            <span class="menu-icon"><i class="mdi mdi-calendar-check"></i></span>
+            <span class="menu-title">Schedule</span>
+          </a>
+        </li>
+         <li class="nav-item menu-items {% if request.resolver_match.url_name == 'student-attendance' %}active{% endif %}">
           <a class="nav-link" href="{% url 'student-attendance' %}">
             <span class="menu-icon"><i class="mdi mdi-calendar-check"></i></span>
             <span class="menu-title">View Attendance</span>
           </a>
         </li>
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="#">
-            <span class="menu-icon"><i class="mdi mdi-book-open-page-variant"></i></span>
-            <span class="menu-title">My Courses</span>
-          </a>
-        </li>
+       
       {% endif %}
     {% endif %}
   </ul>

@@ -61,6 +61,7 @@ def mark_attendance(request):
 
 
 
+
 @login_required
 def student_attendance_view(request):
     user = request.user
@@ -70,14 +71,21 @@ def student_attendance_view(request):
         })
 
     attendance_records = Attendance.objects.filter(student=user).order_by('date')
-
     total_days = attendance_records.values('date').distinct().count()
     present_days = attendance_records.filter(status='Present').count()
     percentage = round((present_days / total_days) * 100, 2) if total_days > 0 else 0
+
+    # Get student profile and student_id
+    try:
+        profile = user.studentprofile
+        student_id = profile.student_id
+    except StudentProfile.DoesNotExist:
+        student_id = None
 
     return render(request, 'students/student_attendance.html', {
         'attendance_records': attendance_records,
         'total_days': total_days,
         'present_days': present_days,
         'percentage': percentage,
+        'student_id': student_id,
     })

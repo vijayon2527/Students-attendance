@@ -1,8 +1,10 @@
-# views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
-from .models import Course
-from .forms import CourseForm
+from .forms import *
+from .models import *
+from materials.models import *  
+from courses.models import *  
+from django.contrib.auth.decorators import login_required
 
 def is_admin(user):
     return user.is_authenticated and user.user_type == 'ADMIN'
@@ -39,3 +41,7 @@ def course_delete(request, pk):
         course.delete()
         return redirect('courses:course_list')
     return render(request, 'Admin/course_confirm_delete.html', {'course': course})
+
+
+
+

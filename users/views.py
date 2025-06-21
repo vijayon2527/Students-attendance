@@ -8,6 +8,20 @@ from .models import *
 
 
 
+def admin_dashboard(request):
+    total_users = User.objects.count()
+    admin_count = User.objects.filter(user_type='ADMIN').count()
+    faculty_count = User.objects.filter(user_type='FACULTY').count()
+    student_count = User.objects.filter(user_type='STUDENT').count()
+
+    return render(request, 'Dashboards/admin_dashboard.html', {
+        'total_users': total_users,
+        'admin_count': admin_count,
+        'faculty_count': faculty_count,
+        'student_count': student_count,
+    })
+
+
 
 def home_view(request):
     return render(request, 'pages/Home.html')
@@ -18,15 +32,10 @@ def about_view(request):
 def contact_view(request):
     return render(request, 'pages/Contact.html')
 
-
 def courses_view(request):
     return render(request, 'pages/Courses.html')
 
 
-
-@login_required
-def admin_dashboard(request):
-    return render(request, 'Dashboards/admin_dashboard.html')
 
 
 def faculty_dashboard(request):
@@ -39,12 +48,22 @@ def faculty_dashboard(request):
         "students": students,
     })
 
+
 @login_required
 def student_dashboard(request):
+    total_users = User.objects.count()
+    admin_count = User.objects.filter(user_type='ADMIN').count()
+    faculty_count = User.objects.filter(user_type='FACULTY').count()
+    student_count = User.objects.filter(user_type='STUDENT').count()
+
     student_profile = StudentProfile.objects.get(user=request.user)
     return render(request, 'Dashboards/student_dashboard.html', {
         'user': request.user,
-        'student_profile': student_profile
+        'student_profile': student_profile,
+         'total_users': total_users,
+        'admin_count': admin_count,
+        'faculty_count': faculty_count,
+        'student_count': student_count,
     })
 
 

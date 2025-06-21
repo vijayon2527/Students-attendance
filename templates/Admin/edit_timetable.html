@@ -1,0 +1,18 @@
+{% extends "Dashboards/base.html" %}
+{% block title %}Edit Timetable Entry{% endblock %}
+
+{% block content %}
+<div class="container mt-5 col-md-6">
+  <a href="{% url 'students:admin_course_timetable' entry.course.id %}" class="btn btn-sm btn-secondary mb-3">← Back to Timetable</a>
+  <div class="card">
+    <div class="card-header bg-info text-white">Edit Timetable</div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Save Changes</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

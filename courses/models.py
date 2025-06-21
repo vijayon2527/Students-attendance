@@ -15,7 +15,3 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
-class StudentEnrollment(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'user_type': 'STUDENT'})
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    enrolled_on = models.DateField(auto_now_add=True)
