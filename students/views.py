@@ -14,20 +14,21 @@ from .models import *
 
 @login_required
 def student_profile_view(request):
-    student_profile = get_object_or_404(StudentProfile, user=request.user)
+    profile = StudentProfile.objects.get(user=request.user)
 
     if request.method == 'POST':
-        form = StudentProfileForm(request.POST, request.FILES, instance=student_profile)
+        form = StudentProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('students:studentprofile_list')  
     else:
-        form = StudentProfileForm(instance=student_profile)
+        form = StudentProfileForm(instance=profile)
 
     return render(request, 'students/studentprofile_list.html', {
-        'student_profile': student_profile,
-        'form': form
+        'form': form,
+        'student_profile': profile,
+        'user': request.user
     })
+
 
 
 @login_required
