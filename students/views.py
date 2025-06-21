@@ -10,24 +10,46 @@ from courses.models import Course
 
 
 
+# def student_profile_view(request):
+#     profile = StudentProfile.objects.get(user=request.user)
 
-@login_required
+#     if request.method == 'POST':
+#         form = StudentProfileForm(request.POST, request.FILES, instance=profile)
+
+#         # 🔒 Prevent assigning blank course
+#         if form.is_valid():
+#             # Reassign the original course to prevent ValueError
+#             form.instance.course = profile.course
+#             form.save()
+#             # redirect or show success message
+#     else:
+#         form = StudentProfileForm(instance=profile)
+
+#     return render(request, 'students/studentprofile_list.html', {
+#         'form': form,
+#         'student_profile': profile,
+#         'user': request.user,
+#     })
+
+from django.shortcuts import render
+from users.models import StudentProfile
+from .forms import StudentProfileForm
+
 def student_profile_view(request):
-    student_profile = get_object_or_404(StudentProfile, user=request.user)
+    profile = StudentProfile.objects.get(user=request.user)
 
     if request.method == 'POST':
-        form = StudentProfileForm(request.POST, request.FILES, instance=student_profile)
+        form = StudentProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('students:studentprofile_list')  
     else:
-        form = StudentProfileForm(instance=student_profile)
+        form = StudentProfileForm(instance=profile)
 
-    return render(request, 'students/studentprofile_list.html', {
-        'student_profile': student_profile,
-        'form': form
+    return render(request, 'students/studentprofile_list.html', {  # ✅ Fix the template name
+        'form': form,
+        'student_profile': profile,
+        'user': request.user,
     })
-
 
 
 @method_decorator(login_required, name='dispatch')
